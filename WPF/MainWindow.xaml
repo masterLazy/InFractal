@@ -14,7 +14,8 @@
         Title="InFractal" Height="800" Width="1300"
         MinWidth="800" MinHeight="800">
     <DockPanel LastChildFill="True">
-        <Grid x:Name="ActualTitleBar" Height="36" DockPanel.Dock="Top" Background="#f3f3f3">
+        <!--工具栏-->
+        <Grid x:Name="ActualTitleBar" Height="36" DockPanel.Dock="Top" Background="#f3f3f3" ZIndex="1">
             <TextBlock Text="无尽分形" Padding="15" FontSize="12" VerticalAlignment="Center"/>
         </Grid>
         <Canvas x:Name="mainCanvas" >
@@ -22,9 +23,13 @@
             <Canvas x:Name="RendererCanvas" Background="DarkSlateGray" Width="{Binding ActualWidth, ElementName=mainCanvas}" 
               Height="{Binding ActualHeight, ElementName=mainCanvas}">
                 <local:RendererView
+                    x:Name="RendererV"
                     Width="{Binding ActualWidth, ElementName=RendererCanvas}" 
                     Height="{Binding ActualHeight, ElementName=RendererCanvas}"
-                    MouseMove="RendererView_MouseMove"/>
+                    MouseDown="RendererV_MouseDown"
+                    MouseMove="RendererV_MouseMove"
+                    MouseUp="RendererV_MouseUp"
+                    MouseWheel="RendererV_MouseWheel"/>
                 <Button x:Name="OptionButton" Margin="10 10 10 10"
                     Padding="5 5 5 5"
                     Canvas.Right="5" Canvas.Top="5" Visibility="Hidden"
@@ -51,7 +56,7 @@
                     <StackPanel Margin="20 10 20 0">
                         <ui:IconAndText Icon="{x:Static ui:FluentSystemIcons.Cursor_20_Regular}" Content="光标复数坐标"
                                         FontSize="15" Foreground="#333333" Margin="0 0 0 5" HorizontalAlignment="Left"/>
-                        <TextBlock x:Name="CurPos" Text="+ 0 &#x000A;+ 0 i" FontFamily="Times New Roman" FontSize="18" Foreground="#333333"/>
+                        <TextBlock x:Name="CurPos" Text="+ 0 &#x000A;+ 0 i" FontFamily="Arial" FontSize="18" Foreground="#333333"/>
                     </StackPanel>
                     <!--最大迭代次数-->
                     <TextBlock Text="{Binding Value, ElementName=MaxIteration, StringFormat=最大迭代次数：{0}}" 
@@ -87,7 +92,8 @@
                                     </ComboBox>
                                 </StackPanel>
                                 <Separator Margin="20 5 20 5"/>
-                                <CheckBox Content="抗锯齿" Margin="20 0 20 0"/>
+                                <CheckBox Content="抗锯齿" Margin="20 0 20 0" x:Name="AACb"
+                                          Checked="AACb_Changed" Unchecked="AACb_Changed" IsChecked="True"/>
                                 <StackPanel Orientation="Horizontal" Margin="20 5 20 5">
                                     <TextBlock Text="配色方案：" Foreground="#333333" VerticalAlignment="Center"/>
                                     <ComboBox IsEditable="false" SelectedIndex="0"

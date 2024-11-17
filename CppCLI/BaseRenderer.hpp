@@ -1,10 +1,12 @@
+#pragma once
+
 // C++/CLR
 #include <msclr/marshal_cppstd.h>
 using namespace System;
 
 namespace CppCLI {
 	/* 渲染器基类 */
-	public ref class BaseRenderer {
+	public ref class BaseRenderer abstract {
 	public:
 		int maxIteration = 100;	// 最大迭代次数
 		float infRange = 3.0f;	// 无穷大判定阈值

@@ -1,3 +1,5 @@
+#pragma once
+
 // STD C++
 #include <stack>
 using namespace std;

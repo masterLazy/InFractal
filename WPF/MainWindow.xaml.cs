@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace WPF {
     /// <summary>
@@ -65,28 +66,41 @@ namespace WPF {
 
         /* 细节选项 */
         private void MaxIteration_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-            RendererInstance.MaxIteration = (int)MaxIteration.Value;
+            RendererV.MaxIteration = (int)MaxIteration.Value;
         }
         private void RAPDCb_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (((ComboBox)sender).SelectedIndex == 0) {
-                RendererInstance.RAPD = true;
+                RendererV.RAPD = true;
             } else {
-                RendererInstance.RAPD = false;
+                RendererV.RAPD = false;
             }
+            RendererV.InvalidateVisual();
         }
         private void IAPDCb_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (((ComboBox)sender).SelectedIndex == 0) {
-                RendererInstance.IAPD = true;
+                RendererV.IAPD = true;
             } else {
-                RendererInstance.IAPD = false;
+                RendererV.IAPD = false;
             }
+            RendererV.InvalidateVisual();
+        }
+        private void AACb_Changed(object sender, RoutedEventArgs e) {
+            if (AACb.IsChecked == true) {
+                RendererV.AntiAliasing = true;
+            } else {
+                RendererV.AntiAliasing = false;
+            }
+            RendererV.InvalidateVisual();
         }
         private void ColorTheme_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            RendererInstance.ColorTheme = ((ComboBox)sender).SelectedIndex + 1;
+            RendererV.ColorTheme = ((ComboBox)sender).SelectedIndex + 1;
         }
 
         /* 渲染视图 */
-        private void RendererView_MouseMove(object sender, MouseEventArgs e) {
+        private void RendererV_MouseDown(object sender, MouseButtonEventArgs e) {
+            RendererV.Drag_MouseDown(e);
+        }
+        private void RendererV_MouseMove(object sender, MouseEventArgs e) {
             double r, i;
             (r, i) = ((RendererView)sender).GetCursorPos(e);
             StringBuilder sb = new StringBuilder();
@@ -105,9 +119,18 @@ namespace WPF {
             sb.Append(Math.Abs(i).ToString($"F{9}"));
             sb.Append(" i");
             CurPos.Text = sb.ToString();
+            RendererV.Drag_MouseMove(e);
         }
-
-
-        public RendererView RendererInstance = new RendererView();
+        private void RendererV_MouseUp(object sender, MouseButtonEventArgs e) {
+            RendererV.Drag_MouseUp(e);
+        }
+        private void RendererV_MouseWheel(object sender, MouseWheelEventArgs e) {
+            if (e.Delta > 0) {
+                RendererV.Zoom++;
+            } else {
+                RendererV.Zoom--;
+            }
+            RendererV.InvalidateVisual();
+        }
     }
 }

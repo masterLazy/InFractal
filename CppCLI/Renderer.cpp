@@ -1,16 +1,3 @@
-// STD C++
-#define _CRT_SECURE_NO_WARNINGS
-#include <vector>
-
-// OpenCL
-#define CL_TARGET_OPENCL_VERSION 300
-#include <CL/opencl.hpp>
-#pragma comment(lib, "OpenCL.lib")
-
-// Image IO
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <stb_image_write.h>
-
 // C++/CLR
 #include <msclr/marshal_cppstd.h>
 using namespace System;
